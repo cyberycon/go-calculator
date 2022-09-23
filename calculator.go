@@ -71,15 +71,27 @@ func (r *RpnStack) push() {
 	}
 }
 
-// BinaryOp Perform binary opperation on X and Y registers in form Y op X
+// BinaryOp Perform binary operation on X and Y registers in form Y op X. Drop the value in X
+// and replace it with the result of the operation
 func (r *RpnStack) BinaryOp(f1 func(op1, op2 decimal.Decimal) decimal.Decimal) *RpnStack {
 	result := f1(r.X(), r.Y())
 	r.Drop().WriteX(result)
 	return r
 }
 
+// UnaryOp Perform an operation on the X register without affecting the others.
+func (r *RpnStack) UnaryOp(f1 func(op1 decimal.Decimal) decimal.Decimal) *RpnStack {
+	r.WriteX(f1(r.X()))
+
+	return r
+}
+
 func Add(op1, op2 decimal.Decimal) decimal.Decimal {
 	return op1.Add(op2)
+}
+
+func ChangeSign(op1 decimal.Decimal) decimal.Decimal {
+	return decimal.Zero.Sub(op1)
 }
 
 func (r *RpnStack) Print() {

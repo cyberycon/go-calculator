@@ -12,6 +12,7 @@ var testValue2, _ = decimal.NewFromString("2")
 var testValue3, _ = decimal.NewFromString("3")
 var testValue4, _ = decimal.NewFromString("4")
 var testValue7, _ = decimal.NewFromString("7")
+var testValueM7, _ = decimal.NewFromString("-7")
 
 var _ = Describe("RPN Stack tests", func() {
 	Context("Empty stack", func() {
@@ -49,6 +50,10 @@ var _ = Describe("RPN Stack tests", func() {
 			stack.Print()
 			stack.BinaryOp(calculator.Add)
 			checkStackValues(stack, []decimal.Decimal{testValue7, testValue2, testValue1, decimal.Zero})
+		})
+		It("Unary operation should change value of x-register", func() {
+			stack.UnaryOp(calculator.ChangeSign)
+			checkStackValues(stack, []decimal.Decimal{testValueM7, testValue2, testValue1, decimal.Zero})
 		})
 	})
 })
